@@ -4,7 +4,11 @@
     <Banner/>
     <div class="newsList">
         <div>
-
+          <div>
+              <div :class = "isEnd==1 ? 'init':''" @click="onCurTab(1)">进行中</div>
+              <div :class = "isEnd==0 ? 'init':''" @click="onCurTab(0)">往期</div>
+              <section>共<span>{{total}}</span>条</section>
+          </div>
             <ul>
                 <li v-for="(item, index) in newsDataList" :key="index">
                     <div>
@@ -72,7 +76,8 @@ export default {
         newsDataList: [],
         newsCategoryList: [],
         key:"",
-        type:1
+        type:1,
+        isEnd:1
         };
     },
     created() {
@@ -111,10 +116,23 @@ export default {
                 this.getEvent()
               }
           	//数据
-
+          },
+          onCurTab(isEnd) {
+            console.log("当前页面isEnd:",isEnd)
+            this.isEnd=isEnd
+            if(this.type==1)
+            {//三会一课
+              this.getMeet()
+              }
+              else{
+                //主题活动
+                this.getEvent()
+              }
+          	//数据
           },
         getEvent(){
-        	api.getEventList({"isEnd":0,"pageNo":this.currentPage,"pageSize":this.pageSize,"name":"*"+this.key+"*"}).then(res => {
+
+        	api.getEventList({"isEnd":this.isEnd,"pageNo":this.currentPage,"pageSize":this.pageSize,"name":"*"+this.key+"*"}).then(res => {
         		console.log(res)
             this.$data.total=res.data.result.total
             this.$data.currentPage=res.data.result.current
@@ -122,13 +140,13 @@ export default {
         		{
         			this.$data.newsDataList=res.data.result.records
         				console.log("获取",this.$data.newsDataList)
-        		}
+         		}
         	}).catch(e => {
         		console.log("请求错误", e)
         	})
         },
         getMeet(){
-        	api.getMeetList({"isEnd":0,"pageNo":this.currentPage,"pageSize":this.pageSize,"name":"*"+this.key+"*"}).then(res => {
+        	api.getMeetList({"isEnd":this.isEnd    ,"pageNo":this.currentPage,"pageSize":this.pageSize,"name":"*"+this.key+"*"}).then(res => {
         		console.log(res)
             this.$data.total=res.data.result.total
             this.$data.currentPage=res.data.result.current

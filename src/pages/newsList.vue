@@ -97,11 +97,11 @@ export default {
         this.getNewsList()
         },
         // 聚焦事件
-              focus: function(e) {
+        focus: function(e) {
                 console.log("聚焦")
               },
-              //失焦事件
-              blur: function(e) {
+        //失焦事件
+        blur: function(e) {
 
                 this.key = e.target.value
                 console.log("获取到的关键词为："+this.key)
